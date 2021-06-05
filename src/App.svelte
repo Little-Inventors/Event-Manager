@@ -3,6 +3,8 @@
   import TextInput from "./components/TextInput.svelte";
   import EventItems from "./Events/EventItems.svelte";
 
+  let ids = ["title", "description", "contact", "fees", "address"];
+
   let events = [
     {
       id: "1",
@@ -40,6 +42,11 @@
 
     events = [newEvent, ...events];
     console.log(events);
+
+    for (const id of ids) {
+      const el = document.getElementById(id);
+      el.value = "";
+    }
   };
 </script>
 
@@ -56,7 +63,6 @@
     type="textarea"
     on:input={(event) => (desc = event.target.value)}
   />
-
   <TextInput
     label="address"
     type="text"
@@ -68,7 +74,7 @@
     on:input={(event) => (contact = event.target.value)}
   />
   <TextInput
-    label="fees"
+    label="fees"      
     type="text"
     on:input={(event) => (fees = event.target.value)}
   />
