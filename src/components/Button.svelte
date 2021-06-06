@@ -4,9 +4,11 @@
   export let href;
 </script>
 
+<!-- navigation -->
 {#if href}
-  <button><a {href}>{caption}</a></button>
+  <button><a {href}>{caption}</a></button>    
 {:else}
+<!-- normal button -->
   <button {type} on:click>{caption}</button>
 {/if}
 

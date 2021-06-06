@@ -11,6 +11,7 @@
       id: "1",
       title: "Programming Bootcamp",
       description: "A bootcamp to learn a new language",
+      email: "irenekurien01@gmail.com",
       address: "27th NerdStreet",
       contact: "0000000000",
       fees: "$25",
@@ -35,30 +36,40 @@
   let fees = "";
 
   const submitHandler = () => {
-    const newEvent = {
-      id: Math.random().toString(),
-      title: title,
-      email: email,
-      description: desc,
-      address: address,
-      contact: contact,
-      fees: fees,
-    };
+    if (
+      title.trim() === "" ||
+      email.trim() === "" ||
+      desc.trim() === "" ||
+      address.trim() === "" ||
+      contact.trim() === "" ||
+      fees.trim() === ""
+    ) {
+      alert("Please fill in all the fields");
+    } else {
+      const newEvent = {
+        id: Math.random().toString(),
+        title: title,
+        email: email,
+        description: desc,
+        address: address,
+        contact: contact,
+        fees: fees,
+      };
 
-    events = [newEvent, ...events];
-    console.log(events);
+      events = [newEvent, ...events];
 
-    for (const id of ids) {
-      const el = document.getElementById(id);
-      el.value = "";
+      for (const id of ids) {
+        const el = document.getElementById(id);
+        el.value = "";
+      }
     }
   };
 
   function toggleAttending(e) {
     const id = e.detail;
     const updatedEvent = { ...events.find((m) => m.id === id) };
-    updatedEvent.isAttending = updatedEvent.isAttending;
-    const eventIndex = events.findIndex(m => m.id === id);
+    updatedEvent.isAttending = !updatedEvent.isAttending;
+    const eventIndex = events.findIndex((m) => m.id === id);
     const updatedEvents = [...events];
     updatedEvents[eventIndex] = updatedEvent;
     events = updatedEvents;
@@ -100,12 +111,11 @@
       type="text"
       on:input={(event) => (fees = event.target.value)}
     />
-    <button>Submit</button>
-    <!-- <Button type="submit" caption="Submit" /> -->
+    <Button type="submit" caption="Submit" />
   </fieldset>
 </form>
 
-<EventsGrid {events} />
+<EventsGrid {events} on:toggleAttending={toggleAttending}/>
 
 <!-- on:toggleAttending={toggleAttending} -->
 <style>

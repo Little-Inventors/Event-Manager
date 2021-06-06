@@ -7,17 +7,21 @@
 <div class="events">
   {#each events as event}
     <EventItems
+      id={event.id}
       title={event.title}
       description={event.description}
       address={event.address}
       contact={event.contact}
       fees={event.fees}
       email={event.email}
+      isAttending={event.isAttending}
+      on:toggleAttending
     />
     <!--
       id={event.id}
-      isAttending={events.isAttending}
-        on:toggleAttending -->
+      isAttending={event.isAttending}
+      on:toggleAttending
+       -->
   {/each}
 </div>
 

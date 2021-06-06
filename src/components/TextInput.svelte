@@ -10,7 +10,7 @@
   {#if type === "textarea"}
     <textarea id="description" {rows} {value} on:input />
   {:else}
-    <input {type} id={label} {value} on:input />
+    <input {type} id={label} {value} on:input/>
   {/if}
 </div>
 

@@ -1,8 +1,8 @@
 <script>
-  // import {createEventDispatcher} from "svelte"
+  import { createEventDispatcher } from "svelte";
   import Button from "../components/Button.svelte";
 
-  // export let id;
+  export let id;
   export let title;
   export let description;
   export let address;
@@ -11,7 +11,7 @@
   export let email;
   export let isAttending;
 
-  // const dispatch = createEventDispatcher();
+  const dispatch = createEventDispatcher();
 </script>
 
 <div class="event-item">
@@ -29,9 +29,11 @@
     <Button type="button" caption="Show Details" />
     <Button
       type="button"
-      caption="{isAttending ? "Unttend" : "Attend"}"
+      caption={isAttending ? "Unattend" : "Attend"}
+      on:click={() => dispatch("toggleAttending", id)}
     />
-    <!-- on:click={() => dispatch(toggleAttending, id)} -->
+    <!-- caption={isAttending ? "Unattend" : "Attend"}
+      on:click={() => dispatch("toggleAttending", id)} -->
   </div>
 </div>
 
