@@ -9,7 +9,7 @@
     top: 0;
     left: 0;
     height: 4rem;
-    background: #777;
+    background: #393e46;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -17,7 +17,8 @@
   }
 
   h1 {
-    color: azure;
+    color: #eeeeee;
     font-size: large;
+    background: #393e46;
   }
 </style>
