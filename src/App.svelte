@@ -1,139 +1,109 @@
 <script>
-  import Button from "./components/Button.svelte";
+  import events from "./Events/events-store";
   import Header from "./components/Header.svelte";
-  import TextInput from "./components/TextInput.svelte";
+  import Button from "./components/Button.svelte";
   import EventsGrid from "./Events/EventsGrid.svelte";
+  import EditEvents from "./Events/EditEvents.svelte";
 
   let ids = ["title", "description", "contact", "fees", "address"];
 
-  let events = [
-    {
-      id: "1",
-      title: "Programming Bootcamp",
-      description: "A bootcamp to learn a new language",
-      email: "irenekurien01@gmail.com",
-      address: "27th NerdStreet",
-      contact: "0000000000",
-      fees: "$25",
-      isAttending: false,
-    },
-    {
-      id: "2",
-      title: "Webdesign",
-      description: "A web design competition",
-      address: "27th NerdStreet",
-      contact: "0000000000",
-      fees: "$25",
-      isAttending: false,
-    },
-  ];
+  // let events = ;
 
-  let title = "";
-  let email = "";
-  let desc = "";
-  let address = "";
-  let contact = "";
-  let fees = "";
+  let editMode = false;
 
-  const submitHandler = () => {
+  const addEvent = (event) => {
     if (
-      title.trim() === "" ||
-      email.trim() === "" ||
-      desc.trim() === "" ||
-      address.trim() === "" ||
-      contact.trim() === "" ||
-      fees.trim() === ""
+      event.detail.title.trim() === "" ||
+      event.detail.email.trim() === "" ||
+      event.detail.description.trim() === "" ||
+      event.detail.address.trim() === "" ||
+      event.detail.contact.trim() === "" ||
+      event.detail.fees.trim() === ""
     ) {
       alert("Please fill in all the fields");
     } else {
-      const newEvent = {
-        id: Math.random().toString(),
-        title: title,
-        email: email,
-        description: desc,
-        address: address,
-        contact: contact,
-        fees: fees,
+      const newEventData = {
+        title: event.detail.title,
+        email: event.detail.email,
+        description: event.detail.description,
+        address: event.detail.address,
+        contact: event.detail.contact,
+        fees: event.detail.fees,
       };
 
-      events = [newEvent, ...events];
+      events.addEvent(newEventData);
 
       for (const id of ids) {
         const el = document.getElementById(id);
         el.value = "";
       }
     }
+    editMode = false;
   };
+
+  // const addEvent = (event) => {
+  //   console.log(event.detail.description);
+  //   if (
+  //     event.detail.title.trim() === "" ||
+  //     event.detail.email.trim() === "" ||
+  //     event.detail.description.trim() === "" ||
+  //     event.detail.address.trim() === "" ||
+  //     event.detail.contact.trim() === "" ||
+  //     event.detail.fees.trim() === ""
+  //   ) {
+  //     alert("Please fill in all the fields");
+  //   } else {
+  //     const newEvent = {
+  //       id: Math.random().toString(),
+  //       title: event.detail.title,
+  //       email: event.detail.email,
+  //       description: event.detail.description,
+  //       address: event.detail.address,
+  //       contact: event.detail.contact,
+  //       fees: event.detail.fees,
+  //     };
+
+  //     events = [newEvent, ...events];
+
+  //     for (const id of ids) {
+  //       const el = document.getElementById(id);
+  //       el.value = "";
+  //     }
+  //   }
+  //   editMode = false;
+  // };
 
   function toggleAttending(e) {
     const id = e.detail;
-    const updatedEvent = { ...events.find((m) => m.id === id) };
-    updatedEvent.isAttending = !updatedEvent.isAttending;
-    const eventIndex = events.findIndex((m) => m.id === id);
-    const updatedEvents = [...events];
-    updatedEvents[eventIndex] = updatedEvent;
-    events = updatedEvents;
+
+    events.toggleAttending(id)
+    // const updatedEvent = { ...events.find((m) => m.id === id) };
+    // updatedEvent.isAttending = !updatedEvent.isAttending;
+    // const eventIndex = events.findIndex((m) => m.id === id);
+    // const updatedEvents = [...events];
+    // updatedEvents[eventIndex] = updatedEvent;
+    // events = updatedEvents;
   }
 </script>
 
 <Header />
 
-<form on:submit|preventDefault={submitHandler}>
-  <fieldset>
-    <legend>Event Registeration</legend>
-    <TextInput
-      label="title"
-      type="text"
-      on:input={(event) => (title = event.target.value)}
-    />
-    <TextInput
-      label="email"
-      type="email"
-      on:input={(event) => (email = event.target.value)}
-    />
-    <TextInput
-      label="description"
-      type="textarea"
-      on:input={(event) => (desc = event.target.value)}
-    />
-    <TextInput
-      label="address"
-      type="text"
-      on:input={(event) => (address = event.target.value)}
-    />
-    <TextInput
-      label="contact"
-      type="number"
-      on:input={(event) => (contact = event.target.value)}
-    />
-    <TextInput
-      label="fees"
-      type="text"
-      on:input={(event) => (fees = event.target.value)}
-    />
-    <Button type="submit" caption="Submit" />
-  </fieldset>
-</form>
+<main>
+  {#if editMode}
+    <EditEvents on:save={addEvent} />
+  {:else}
+    <div class="edit-controls">
+      <Button on:click={() => (editMode = true)}>New Event</Button>
+    </div>
+  {/if}
+  <EventsGrid events={$events} on:toggleAttending={toggleAttending} />
+</main>
 
-<EventsGrid {events} on:toggleAttending={toggleAttending}/>
-
-<!-- on:toggleAttending={toggleAttending} -->
 <style>
-  form {
-    width: 50%;
+  main {
     margin: 6rem auto;
   }
-
-  fieldset {
-    padding: 40px;
-    border: solid 1px #00adb5;
-    width: 100%;
-    margin: 0 auto;
-  }
-
-  fieldset legend {
-    background: #00adb5;
-    padding: 10px;
-    border: solid 1px #00adb5;
+  .edit-controls {
+    float: right;
   }
 </style>

@@ -1,6 +1,7 @@
 <script>
   import { createEventDispatcher } from "svelte";
   import Button from "../components/Button.svelte";
+  import Badge from "../components/Badge.svelte";
 
   export let id;
   export let title;
@@ -16,7 +17,12 @@
 
 <div class="event-item">
   <header>
-    <h1>{title}</h1>
+    <h1>
+      {title}
+      {#if isAttending}
+        <Badge>ATTENDING</Badge>
+      {/if}
+    </h1>
     <p>{description}</p>
   </header>
   <div class="content">
@@ -25,15 +31,11 @@
     <p>{fees}</p>
   </div>
   <div class="buttons">
-    <Button href="mail:to:{email}" caption="contact" />
-    <Button type="button" caption="Show Details" />
-    <Button
-      type="button"
-      caption={isAttending ? "Unattend" : "Attend"}
-      on:click={() => dispatch("toggleAttending", id)}
-    />
-    <!-- caption={isAttending ? "Unattend" : "Attend"}
-      on:click={() => dispatch("toggleAttending", id)} -->
+    <Button href="mail:to:{email}">Contact</Button>
+    <Button type="button">Show Details</Button>
+    <Button type="button" on:click={() => dispatch("toggleAttending", id)}
+      >{isAttending ? "Unattend" : "Attend"}</Button
+    >
   </div>
 </div>
 
